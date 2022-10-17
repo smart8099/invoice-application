@@ -1,6 +1,7 @@
 # Mpidegree Assessment Project 
-> This is a web application that provides commercial and scientific space travel services.
-> The application will allow users to book rockets and join selected space missions.
+> This is a web application that provides CRUD API endpoints for a business
+> to create invoices for purchased products. Admins can also upload a csv
+>data of previously purchased invoices. 
 
 
 
@@ -19,26 +20,25 @@ To get a local copy up and running follow these simple example steps.
 
 ### Setup
 
-    git clone https://github.com/Fourteen98/Space-Travelers-Hub.git 
+    git clone https://github.com/smart8099/mpedigree-assessment.git
 
 ### Install
-    npm install
+    pip3 install -r requirements.txt
 
 ### Usage
-    npm run dev
+    python3 manage.py runserver
     
 
-### Deployment
-    npm run deploy
 
 
 ## Authors
 
-👤 Abdul Basit Mohammed
+👤 Abdul Basit Mohammed and 👤 Elias Muhiydeen
 
-GitHub: @smart8099
+GitHub: @smart8099, @Fourteen98
 
-- GitHub: [smart8099](https://github.com/Fourteen98/)
+- GitHub: [smart8099]
+- GitHub: [Fourteen98] (https://github.com/Fourteen98/)
 
 
 
