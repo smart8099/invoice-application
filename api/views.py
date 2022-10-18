@@ -1,3 +1,4 @@
+from django.urls import is_valid_path
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
@@ -40,4 +41,22 @@ def get_invoice_detail(request, pk):
     return Response(serializer.data)    
 
 
+@api_view(['PUT'])
+def update_invoice(request,pk):
+       
+        try:
+            invoice = Invoice.objects.get(pk=pk)
+        except Invoice.DoesNotExist:
+            return Response (status=404)    
+
+        serialized_invoice = InvoiceSerializer(invoice, data=request.data)
+
+        if serialized_invoice.is_valid():
+            serialized_invoice.save()
+            return Response(serialized_invoice.data)
+        return Response (serialized_invoice.errors,status=400)    
+       
+
+
+  
 
