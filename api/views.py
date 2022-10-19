@@ -1,11 +1,12 @@
+from operator import inv
 from django.urls import is_valid_path
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
-from django.core.paginator import Paginator,EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.decorators import api_view
 from .models import Invoice
-from.serializers import InvoiceSerializer
+from .serializers import InvoiceSerializer
 
 
 @api_view(['GET'])
@@ -13,10 +14,10 @@ def getInvoices(request):
     paginator = PageNumberPagination()
     #paginator.page_size = 10
     invoice = Invoice.objects.all()
-    result_page = paginator.paginate_queryset(invoice,request)
-    
+    result_page = paginator.paginate_queryset(invoice, request)
+
     serialized_invoice = InvoiceSerializer(result_page, many=True)
-    return Response(serialized_invoice.data,status=status.HTTP_200_OK)
+    return Response(serialized_invoice.data, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -26,8 +27,8 @@ def addInvoice(request):
     if serialized_invoice.is_valid():
         serialized_invoice.save()
 
-        return Response(serialized_invoice.data,status=201)
-    return Response(serialized_invoice.errors, status=400)  
+        return Response(serialized_invoice.data, status=201)
+    return Response(serialized_invoice.errors, status=400)
 
 
 @api_view(['GET'])
@@ -36,27 +37,35 @@ def get_invoice_detail(request, pk):
         invoice = Invoice.objects.get(pk=pk)
     except Invoice.DoesNotExist:
         return Response(status=404)
-  
+
     serializer = InvoiceSerializer(invoice)
-    return Response(serializer.data)    
+    return Response(serializer.data)
 
 
 @api_view(['PUT'])
-def update_invoice(request,pk):
-       
-        try:
-            invoice = Invoice.objects.get(pk=pk)
-        except Invoice.DoesNotExist:
-            return Response (status=404)    
+def update_invoice(request, pk):
 
-        serialized_invoice = InvoiceSerializer(invoice, data=request.data)
+    try:
+        invoice = Invoice.objects.get(pk=pk)
+    except Invoice.DoesNotExist:
+        return Response(status=404)
 
-        if serialized_invoice.is_valid():
-            serialized_invoice.save()
-            return Response(serialized_invoice.data)
-        return Response (serialized_invoice.errors,status=400)    
-       
+    serialized_invoice = InvoiceSerializer(invoice, data=request.data)
+
+    if serialized_invoice.is_valid():
+        serialized_invoice.save()
+        return Response(serialized_invoice.data)
+    return Response(serialized_invoice.errors, status=400)
 
 
-  
+@api_view(['DELETE'])
+def delete_invoice(request, pk):
 
+    try:
+        invoice = Invoice.objects.get(pk=pk)
+    except Invoice.DoesNotExist:
+        return Response(status=404)
+    invoice.delete()
+
+    return Response(status=204)
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
