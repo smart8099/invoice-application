@@ -28,3 +28,16 @@ def addInvoice(request):
         return Response(serialized_invoice.data,status=201)
     return Response(serialized_invoice.errors, status=400)  
 
+
+@api_view(['GET'])
+def get_invoice_detail(request, pk):
+    try:
+        invoice = Invoice.objects.get(pk=pk)
+    except Invoice.DoesNotExist:
+        return Response(status=404)
+  
+    serializer = InvoiceSerializer(invoice)
+    return Response(serializer.data)    
+
+
+
