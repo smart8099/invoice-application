@@ -16,6 +16,15 @@ def getInvoices(request):
     
     serialized_invoice = InvoiceSerializer(result_page, many=True)
     return Response(serialized_invoice.data,status=status.HTTP_200_OK)
-   
 
-    
+
+@api_view(['POST'])
+def addInvoice(request):
+    serialized_invoice = InvoiceSerializer(data=request.data)
+
+    if serialized_invoice.is_valid():
+        serialized_invoice.save()
+
+        return Response(serialized_invoice.data,status=201)
+    return Response(serialized_invoice.errors, status=400)  
+
