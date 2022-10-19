@@ -1,7 +1,7 @@
 from typing import ItemsView
 from unittest.mock import seal
 from rest_framework import serializers
-from .models import Invoice
+from api.models import Invoice
 
 class InvoiceSerializer(serializers.ModelSerializer):
     class Meta:
