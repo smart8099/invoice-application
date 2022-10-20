@@ -11,6 +11,9 @@ from api.models import Invoice
 from api.serializers import InvoiceSerializer
 from api.pagination import CustomPagination
 
+from rest_framework.filters import SearchFilter
+
+
 
 
 
@@ -18,6 +21,8 @@ class InvoiceView(ListAPIView):
     queryset = Invoice.objects.all().order_by('id')
     serializer_class = InvoiceSerializer
     pagination_class = CustomPagination
+    filter_backends = [SearchFilter]
+    search_fields = ('recipient_name','description')
 
 
 
