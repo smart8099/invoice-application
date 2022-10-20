@@ -15,7 +15,7 @@ from api.pagination import CustomPagination
 
 
 class InvoiceView(ListAPIView):
-    queryset = Invoice.objects.all()
+    queryset = Invoice.objects.all().order_by('id')
     serializer_class = InvoiceSerializer
     pagination_class = CustomPagination
 
