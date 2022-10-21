@@ -20,3 +20,6 @@ class Invoice(models.Model):
     recipient_name = models.CharField(max_length=50,blank=False,null=False)
     description = models.CharField(max_length=300)
     reference_code = models.CharField(max_length=10,unique=True,default=generate_invoice_token)
+
+
+    
