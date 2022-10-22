@@ -33,6 +33,10 @@ To get a local copy up and running follow these simple example steps.
 ### Set up Database
     Use Mysql DB
     Create your .env file using the sample example (.env.example).
+    
+
+    
+    
     Insert your SECRET_KEY, and other database related info in the env file    
 
 ### Run DB Migrations
@@ -41,6 +45,17 @@ To get a local copy up and running follow these simple example steps.
 ### Usage
     python3 manage.py runserver
     
+### API endpoints
+    http://127.0.0.1:8000/invoices
+    http://127.0.0.1:8000/invoices/add
+    http://127.0.0.1:8000/invoices/delete/<int:pk>
+    http://127.0.0.1:8000/invoices/update/<int:pk>
+    http://127.0.0.1:8000/invoices/upload
+    http://127.0.0.1:8000/invoices/<int:pk>   
+    
+### Sample CSV file to upload
+    A file named "sample_invoices.csv" has been provided to upload sample invoices. 
+
 
 
 ## Authors
