@@ -1,77 +1,65 @@
+from encodings import search_function
 from operator import inv
-from django.urls import is_valid_path
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView,CreateAPIView,ListCreateAPIView,RetrieveAPIView,UpdateAPIView,DestroyAPIView
 from api.models import Invoice
-from api.serializers import InvoiceSerializer
+from api.serializers import InvoiceSerializer, InvoiceFileUploadSerializer
 from api.pagination import CustomPagination
-
+import io,csv
+import pandas as pd
 from rest_framework.filters import SearchFilter
 
 
+class UploadFileView(CreateAPIView):
+    serializer_class = InvoiceFileUploadSerializer
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        file = serializer.validated_data['file']
+        reader = pd.read_csv(file)
+        for _, row in reader.iterrows():
+            new_invoice = Invoice(
+                       expiration_date = row['Expiration Date'],
+                       invoice_items_count = row["Number of Invoices"],
+                       recipient_name = row["Recipient Name"],
+                       description = row["Description"]
+                       )
+            new_invoice.save()
+        return Response({"status": "success"},
+                        status.HTTP_201_CREATED)
 
-
-
-class InvoiceView(ListAPIView):
-    queryset = Invoice.objects.all().order_by('id')
+class InvoiceView(ListCreateAPIView):
+    queryset = Invoice.objects.all()
     serializer_class = InvoiceSerializer
     pagination_class = CustomPagination
     filter_backends = [SearchFilter]
     search_fields = ('recipient_name','description')
 
 
-
-@api_view(['POST'])
-def addInvoice(request):
-    serialized_invoice = InvoiceSerializer(data=request.data)
-
-    if serialized_invoice.is_valid():
-        serialized_invoice.save()
-
-        return Response(serialized_invoice.data, status=status.HTTP_201_CREATED)
-    return Response(serialized_invoice.errors, status=status.HTTP_400_BAD_REQUEST)
+class AddInvoice(CreateAPIView):
+    serializer_class = InvoiceSerializer
+    
 
 
-@api_view(['GET'])
-def get_invoice_detail(request, pk):
-    try:
-        invoice = Invoice.objects.get(pk=pk)
-    except Invoice.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
 
-    serializer = InvoiceSerializer(invoice)
-    return Response(serializer.data)
+class InvoiceDetailView(RetrieveAPIView):
+    lookup_field = "id"
+    serializer_class = InvoiceSerializer
+    queryset =  Invoice.objects.all()
 
-
-@api_view(['PUT'])
-def update_invoice(request, pk):
-
-    try:
-        invoice = Invoice.objects.get(pk=pk)
-    except Invoice.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    serialized_invoice = InvoiceSerializer(invoice, data=request.data)
-
-    if serialized_invoice.is_valid():
-        serialized_invoice.save()
-        return Response(serialized_invoice.data)
-    return Response(serialized_invoice.errors, status=status.HTTP_400_BAD_REQUEST)
+class UpdateInvoice(UpdateAPIView):
+    serializer_class = InvoiceSerializer
+    queryset = Invoice.objects.all()
 
 
-@api_view(['DELETE'])
-def delete_invoice(request, pk):
+class DeleteInvoice(DestroyAPIView):
+    serializer_class = InvoiceSerializer
+    queryset = Invoice.objects.all()
 
-    try:
-        invoice = Invoice.objects.get(pk=pk)
-    except Invoice.DoesNotExist:
-        return Response(status=404)
-    invoice.delete()
 
-    return Response(status=status.HTTP_204_NO_CONTENT)
- 
