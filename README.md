@@ -61,4 +61,4 @@ Contributions, issues, and feature requests are welcome!
 
 ## Acknowledgments
 
-- Mpidegree Assessment [ Smart8099 and Fourteen98]
+- Mpidegree Assessment [ Smart8099]
