@@ -41,6 +41,11 @@ To get a local copy up and running follow these simple example steps.
 
 ### Run DB Migrations
     python3 manage.py migrate    
+    
+### To provide sample data into Mysql DB, run this command:
+    python3 manage.py createdata
+    
+    
 
 ### Usage
     python3 manage.py runserver
