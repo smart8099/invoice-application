@@ -1,4 +1,4 @@
-# Mpidegree Assessment Project 
+# Invoice Application 
 > This is a web application that provides CRUD API endpoints for a business
 > to create invoices for purchased products. Admins can also upload a csv
 >data of previously purchased invoices. 
@@ -20,8 +20,8 @@ To get a local copy up and running follow these simple example steps.
 
 ### Setup
 
-    git clone https://github.com/smart8099/mpedigree-assessment.git
-    cd mpedigree-assessment
+    https://github.com/smart8099/invoice-application.git
+    cd invoice-application
 
 ### Create and activate Virtual Environment 
     python3 -m venv <your-venv-name>  
